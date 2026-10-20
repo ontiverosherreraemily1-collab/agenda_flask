@@ -1,0 +1,89 @@
+Agregar
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Actividades</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="contenedor">
+        <h1>Agenda de Actividades</h1>
+
+        <form action="{{ url_for('agregar') }}" method="POST">
+            <label>Título</label>
+            <input type="text" name="titulo" placeholder="Ej. Tarea de IA" required>
+
+            <label>Descripción</label>
+            <input type="text" name="descripcion" placeholder="Ej. Investigar sobre Flask">
+
+            <label>Fecha</label>
+            <input type="date" name="fecha" required>
+
+            <button type="submit" class="guardar">
+                Guardar actividad
+            </button>
+        </form>
+
+        <h2>Actividades registradas</h2>
+
+        <div class="tabla-contenedor">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for actividad in actividades %}
+                    <tr>
+                        <td>{{ actividad['id'] }}</td>
+                        <td>{{ actividad['titulo'] }}</td>
+                        <td>{{ actividad['descripcion'] }}</td>
+                        <td>{{ actividad['fecha'] }}</td>
+                        <td>
+                            {% if actividad['completada'] %}
+                            Completada
+                            {% else %}
+                            Pendiente
+                            {% endif %}
+                        </td>
+                        <td class="acciones">
+                            <a class="editar" href="{{ url_for('editar', id=actividad['id']) }}">
+                                Editar
+                            </a>
+
+                            <form action="{{ url_for('eliminar', id=actividad['id']) }}" method="POST"
+                                onsubmit="return confirm('¿Eliminar esta actividad?');">
+                                <button type="submit" class="eliminar">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">
+                            No hay actividades registradas.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
+algo de texto
